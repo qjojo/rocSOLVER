@@ -83,13 +83,10 @@ rocblas_status rocsolver_lauum_template(rocblas_handle handle,
     S one = 1;
     S zero = 0;
 
-    rocblas_operation transW
-        = (uplo == rocblas_fill_upper) ? rocblas_operation_transpose : rocblas_operation_none;
-
     // put the triangular factor of interest in work
     ROCSOLVER_LAUNCH_KERNEL(set_zero<T>, grid, threads, 0, stream, n, n, work, 0, n, strideW, uplo);
-    ROCSOLVER_LAUNCH_KERNEL(copy_trans_mat<T>, grid, threads, 0, stream, transW, n, n, A, shiftA,
-                            lda, strideA, work, 0, n, strideW, no_mask{}, uplo);
+    ROCSOLVER_LAUNCH_KERNEL(copy_mat<T>, grid, threads, 0, stream, n, n, A, shiftA, lda, strideA,
+                            work, 0, n, strideW, no_mask{}, uplo);
 
     // work = work * work' or work = work' * work
     rocblasCall_syrk_herk<false, T>(handle, uplo, rocblas_operation_conjugate_transpose, n, n, &one,
