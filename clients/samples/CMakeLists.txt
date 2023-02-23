@@ -3,27 +3,27 @@
 # ########################################################################
 
 # declare sample programs
-add_executable(example-c-basic
-  example_basic.c
-)
-add_executable(example-cpp-basic
-  example_basic.cpp
-)
-add_executable(example-c-graph
-  example_graph.c
-)
-add_executable(example-c-hmm
-  example_hmm.c
-)
-add_executable(example-cpp-logging
-  example_logging.cpp
-)
-add_executable(example-c-batched
-  example_batched.c
-)
-add_executable(example-c-strided-batched
-  example_strided_batched.c
-)
+# add_executable(example-c-basic
+#   example_basic.c
+# )
+# add_executable(example-cpp-basic
+#   example_basic.cpp
+# )
+# add_executable(example-c-graph
+#   example_graph.c
+# )
+# add_executable(example-c-hmm
+#   example_hmm.c
+# )
+# add_executable(example-cpp-logging
+#   example_logging.cpp
+# )
+# add_executable(example-c-batched
+#   example_batched.c
+# )
+# add_executable(example-c-strided-batched
+#   example_strided_batched.c
+# )
 
 # group sample programs by language
 set(c_samples

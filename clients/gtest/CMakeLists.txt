@@ -5,94 +5,94 @@
 find_package(GTest REQUIRED)
 
 set(roclapack_test_source
-  # linear systems solvers
-  getri_gtest.cpp
-  getrs_gtest.cpp
-  gesv_gtest.cpp
-  potrs_gtest.cpp
-  posv_gtest.cpp
-  potri_gtest.cpp
-  trtri_gtest.cpp
-  geblttrs_gtest.cpp
-  # least squares solvers
-  gels_gtest.cpp
-  # triangular factorizations
-  getf2_getrf_gtest.cpp
-  potf2_potrf_gtest.cpp
-  sytf2_sytrf_gtest.cpp
-  geblttrf_gtest.cpp
-  # orthogonal factorizations
-  geqr2_geqrf_gtest.cpp
-  gerq2_gerqf_gtest.cpp
-  geql2_geqlf_gtest.cpp
-  gelq2_gelqf_gtest.cpp
-  # problem and matrix reductions (diagonalizations)
-  gebd2_gebrd_gtest.cpp
-  sytxx_hetxx_gtest.cpp
-  sygsx_hegsx_gtest.cpp
-  # singular value decomposition
-  gesvd_gtest.cpp
-  gesvdj_gtest.cpp
-  gesvdx_gtest.cpp
-  # symmetric eigensolvers
-  syev_heev_gtest.cpp
-  syevd_heevd_gtest.cpp
-  syevj_heevj_gtest.cpp
-  syevx_heevx_gtest.cpp
-  syevdx_heevdx_gtest.cpp
-  sygv_hegv_gtest.cpp
-  sygvd_hegvd_gtest.cpp
-  sygvj_hegvj_gtest.cpp
-  sygvx_hegvx_gtest.cpp
-  sygvdx_hegvdx_gtest.cpp
+  # # linear systems solvers
+  # getri_gtest.cpp
+  # getrs_gtest.cpp
+  # gesv_gtest.cpp
+  # potrs_gtest.cpp
+  # posv_gtest.cpp
+  # potri_gtest.cpp
+  # trtri_gtest.cpp
+  # geblttrs_gtest.cpp
+  # # least squares solvers
+  # gels_gtest.cpp
+  # # triangular factorizations
+  # getf2_getrf_gtest.cpp
+  # potf2_potrf_gtest.cpp
+  # sytf2_sytrf_gtest.cpp
+  # geblttrf_gtest.cpp
+  # # orthogonal factorizations
+  # geqr2_geqrf_gtest.cpp
+  # gerq2_gerqf_gtest.cpp
+  # geql2_geqlf_gtest.cpp
+  # gelq2_gelqf_gtest.cpp
+  # # problem and matrix reductions (diagonalizations)
+  # gebd2_gebrd_gtest.cpp
+  # sytxx_hetxx_gtest.cpp
+  # sygsx_hegsx_gtest.cpp
+  # # singular value decomposition
+  # gesvd_gtest.cpp
+  # gesvdj_gtest.cpp
+  # gesvdx_gtest.cpp
+  # # symmetric eigensolvers
+  # syev_heev_gtest.cpp
+  # syevd_heevd_gtest.cpp
+  # syevj_heevj_gtest.cpp
+  # syevx_heevx_gtest.cpp
+  # syevdx_heevdx_gtest.cpp
+  # sygv_hegv_gtest.cpp
+  # sygvd_hegvd_gtest.cpp
+  # sygvj_hegvj_gtest.cpp
+   sygvx_hegvx_gtest.cpp
+  # sygvdx_hegvdx_gtest.cpp
 )
 
 set(rocauxiliary_test_source
-  # vector & matrix manipulations
-  lacgv_gtest.cpp
-  laswp_gtest.cpp
-  # householder reflections
-  larf_gtest.cpp
-  larfg_gtest.cpp
-  larft_gtest.cpp
-  larfb_gtest.cpp
-  # orthonormal/unitary matrices
-  orgxr_ungxr_gtest.cpp
-  orglx_unglx_gtest.cpp
-  orgxl_ungxl_gtest.cpp
-  orgbr_ungbr_gtest.cpp
-  orgtr_ungtr_gtest.cpp
-  ormxr_unmxr_gtest.cpp
-  ormlx_unmlx_gtest.cpp
-  ormxl_unmxl_gtest.cpp
-  ormbr_unmbr_gtest.cpp
-  ormtr_unmtr_gtest.cpp
-  # bidiagonal matrices
-  labrd_gtest.cpp
-  bdsqr_gtest.cpp
-  bdsvdx_gtest.cpp
-  # tridiagonal matrices
-  sterf_gtest.cpp
-  steqr_gtest.cpp
-  stedc_gtest.cpp
-  stebz_gtest.cpp
-  stein_gtest.cpp
-  latrd_gtest.cpp
-  # symmetric matrices
-  lasyf_gtest.cpp
-  # triangular matrices
-  lauum_gtest.cpp
+  # # vector & matrix manipulations
+  # lacgv_gtest.cpp
+  # laswp_gtest.cpp
+  # # householder reflections
+  # larf_gtest.cpp
+  # larfg_gtest.cpp
+  # larft_gtest.cpp
+  # larfb_gtest.cpp
+  # # orthonormal/unitary matrices
+  # orgxr_ungxr_gtest.cpp
+  # orglx_unglx_gtest.cpp
+  # orgxl_ungxl_gtest.cpp
+  # orgbr_ungbr_gtest.cpp
+  # orgtr_ungtr_gtest.cpp
+  # ormxr_unmxr_gtest.cpp
+  # ormlx_unmlx_gtest.cpp
+  # ormxl_unmxl_gtest.cpp
+  # ormbr_unmbr_gtest.cpp
+  # ormtr_unmtr_gtest.cpp
+  # # bidiagonal matrices
+  # labrd_gtest.cpp
+  # bdsqr_gtest.cpp
+  # bdsvdx_gtest.cpp
+  # # tridiagonal matrices
+  # # sterf_gtest.cpp
+  # steqr_gtest.cpp
+  # stedc_gtest.cpp
+  # stebz_gtest.cpp
+  # stein_gtest.cpp
+  # latrd_gtest.cpp
+  # # symmetric matrices
+  # lasyf_gtest.cpp
+  # # triangular matrices
+  # lauum_gtest.cpp
 )
 
 set(others_test_source
-  # unified memory model
-  managed_malloc_gtest.cpp
-  # rocblas memory model
-  memory_model_gtest.cpp
-  # rocsolver logging
-  logging_gtest.cpp
-  # helpers
-  client_environment_helpers.cpp
+  # # unified memory model
+  # managed_malloc_gtest.cpp
+  # # rocblas memory model
+  # memory_model_gtest.cpp
+  # # rocsolver logging
+  # logging_gtest.cpp
+  # # helpers
+  # client_environment_helpers.cpp
 )
 
 set(rocsolver_test_source

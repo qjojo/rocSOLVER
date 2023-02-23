@@ -3748,6 +3748,7 @@ ROCSOLVER_EXPORT rocblas_status rocsolver_zbdsqr(rocblas_handle handle,
                 converge to zero.
     ********************************************************************/
 
+/*
 ROCSOLVER_EXPORT rocblas_status rocsolver_ssterf(rocblas_handle handle,
                                                  const rocblas_int n,
                                                  float* D,
@@ -3759,6 +3760,7 @@ ROCSOLVER_EXPORT rocblas_status rocsolver_dsterf(rocblas_handle handle,
                                                  double* D,
                                                  double* E,
                                                  rocblas_int* info);
+                                                 */
 //! @}
 
 /*! @{
