@@ -70,4 +70,20 @@ rocblas_status rocsolver_ex_datatype_dispatch(rocblas_datatype dt, Args&&... arg
     }
 }
 
+bool datatype_is_complex(rocblas_datatype dt)
+{
+    switch(dt)
+    {
+    case rocblas_datatype_bf16_c:
+    case rocblas_datatype_f16_c:
+    case rocblas_datatype_f32_c:
+    case rocblas_datatype_f64_c:
+    case rocblas_datatype_i32_c:
+    case rocblas_datatype_i8_c:
+    case rocblas_datatype_u32_c:
+    case rocblas_datatype_u8_c: return true;
+    default: return false;
+    }
+}
+
 ROCSOLVER_END_NAMESPACE
