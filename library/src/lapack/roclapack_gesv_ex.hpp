@@ -40,6 +40,7 @@
 #include "rocsolver_logger.hpp"
 #include <rocblas/internal/rocblas-complex-types.h>
 #include <rocblas/internal/rocblas-types.h>
+#include <rocblas/internal/rocblas_bfloat16.h>
 
 ROCSOLVER_BEGIN_NAMESPACE
 
@@ -54,6 +55,9 @@ rocblas_status rocsolver_ex_datatype_dispatch(rocblas_datatype dt, Args&&... arg
 {
     switch(dt)
     {
+    case rocblas_datatype_f16_r:
+        return rocsolver_ex_datatype_dispatch<Lambda, rocblas_half, Ts..., Args...>(
+            std::forward<Args>(args)...);
     case rocblas_datatype_f32_r:
         return rocsolver_ex_datatype_dispatch<Lambda, float, Ts..., Args...>(
             std::forward<Args>(args)...);
@@ -65,6 +69,9 @@ rocblas_status rocsolver_ex_datatype_dispatch(rocblas_datatype dt, Args&&... arg
             std::forward<Args>(args)...);
     case rocblas_datatype_f64_c:
         return rocsolver_ex_datatype_dispatch<Lambda, rocblas_double_complex, Ts..., Args...>(
+            std::forward<Args>(args)...);
+    case rocblas_datatype_bf16_r:
+        return rocsolver_ex_datatype_dispatch<Lambda, rocblas_bfloat16, Ts..., Args...>(
             std::forward<Args>(args)...);
     default: return rocblas_status_not_implemented;
     }
