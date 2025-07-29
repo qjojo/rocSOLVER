@@ -151,8 +151,9 @@ constexpr bool gesv_ex_mxp_lu_accepts(rocblas_datatype A_type,
     }
 
     // mixing real and complex is not allowed
-    if(!(datatype_is_complex(A_type) == datatype_is_complex(B_type) == datatype_is_complex(X_type)
-         == datatype_is_complex(compute_type)))
+    if((datatype_is_complex(A_type) != datatype_is_complex(B_type))
+       || (datatype_is_complex(B_type) != datatype_is_complex(X_type))
+       || (datatype_is_complex(X_type) != datatype_is_complex(compute_type)))
     {
         return false;
     }
