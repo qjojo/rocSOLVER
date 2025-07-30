@@ -32,6 +32,10 @@
 ROCSOLVER_BEGIN_NAMESPACE
 
 template <typename T>
+constexpr bool gesv_ex_homogenous_accepts = std::is_same_v<T, float> || std::is_same_v<T, double>
+    || std::is_same_v<T, rocblas_float_complex> || std::is_same_v<T, rocblas_double_complex>;
+
+template <typename T, std::enable_if_t<gesv_ex_homogenous_accepts<T>, int> = 0>
 rocblas_status rocsolver_gesv_ex_homogenous(rocblas_handle handle,
                                             const rocblas_int n,
                                             const rocblas_int nrhs,
@@ -84,7 +88,6 @@ rocblas_status rocsolver_gesv_ex_homogenous(rocblas_handle handle,
         return rocblas_set_optimal_device_memory_size(
             handle, size_scalars, size_work, size_work1, size_work2, size_work3, size_work4,
             size_pivotval, size_pivotidx, size_iipiv, size_iinfo);
-
     // memory workspace allocation
     void *scalars, *work, *work1, *work2, *work3, *work4, *pivotval, *pivotidx, *iinfo, *iipiv;
     rocblas_device_malloc mem(handle, size_scalars, size_work, size_work1, size_work2, size_work3,
@@ -113,7 +116,38 @@ rocblas_status rocsolver_gesv_ex_homogenous(rocblas_handle handle,
         (rocblas_int*)pivotidx, (rocblas_int*)iipiv, (rocblas_int*)iinfo, optim_mem);
 }
 
-template <typename T, typename LU>
+template <typename T, std::enable_if_t<!gesv_ex_homogenous_accepts<T>, int> = 0>
+rocblas_status rocsolver_gesv_ex_homogenous(rocblas_handle handle,
+                                            const rocblas_int n,
+                                            const rocblas_int nrhs,
+                                            T* A,
+                                            const rocblas_int lda,
+                                            rocblas_int* ipiv,
+                                            T* B,
+                                            const rocblas_int ldb,
+                                            T* X,
+                                            const rocblas_int ldx,
+                                            const rocblas_int max_iter,
+                                            const double tol,
+                                            rocblas_int* niter,
+                                            rocblas_int* info)
+{
+    return rocblas_status_not_implemented;
+}
+
+template <typename T>
+constexpr bool is_gesv_ex_mxp_lu_storage = std::is_same_v<T, float> || std::is_same_v<T, double>
+    || std::is_same_v<T, rocblas_float_complex> || std::is_same_v<T, rocblas_double_complex>;
+
+template <typename T>
+constexpr bool is_gesv_ex_mxp_lu_compute = std::is_same_v<T, rocblas_half>
+    || std::is_same_v<T, rocblas_bfloat16> || is_gesv_ex_mxp_lu_storage<T>;
+
+template <typename T, typename LU, typename R = LU>
+constexpr bool gesv_ex_mxp_lu_accepts
+    = is_gesv_ex_mxp_lu_storage<T> && is_gesv_ex_mxp_lu_compute<LU> && is_gesv_ex_mxp_lu_compute<R>;
+
+template <typename T, typename LU, typename R = LU, std::enable_if_t<gesv_ex_mxp_lu_accepts<T, LU, R>, int> = 0>
 rocblas_status rocsolver_gesv_ex_mxp_lu(rocblas_handle handle,
                                         const rocblas_int n,
                                         const rocblas_int nrhs,
@@ -133,32 +167,24 @@ rocblas_status rocsolver_gesv_ex_mxp_lu(rocblas_handle handle,
     return rocblas_status_not_implemented;
 }
 
-constexpr bool gesv_ex_mxp_lu_accepts(rocblas_datatype A_type,
-                                      rocblas_datatype B_type,
-                                      rocblas_datatype X_type,
-                                      rocblas_datatype compute_type)
+template <typename T, typename LU, typename R = LU, std::enable_if_t<!gesv_ex_mxp_lu_accepts<T, LU, R>, int> = 0>
+rocblas_status rocsolver_gesv_ex_mxp_lu(rocblas_handle handle,
+                                        const rocblas_int n,
+                                        const rocblas_int nrhs,
+                                        T* A,
+                                        const rocblas_int lda,
+                                        rocblas_int* ipiv,
+                                        T* B,
+                                        const rocblas_int ldb,
+                                        T* X,
+                                        const rocblas_int ldx,
+                                        const rocblas_int max_iter,
+                                        const double tol,
+                                        rocblas_int* niter,
+                                        rocblas_int* info)
 {
-    // heterogenous storage types are not allowed
-    if((A_type != B_type) || (B_type != X_type) || (X_type != A_type))
-    {
-        return false;
-    }
-
-    // using a more precise type for LU is not allowed
-    if(rocblas_sizeof_datatype(compute_type) > rocblas_sizeof_datatype(A_type))
-    {
-        return false;
-    }
-
-    // mixing real and complex is not allowed
-    if((datatype_is_complex(A_type) != datatype_is_complex(B_type))
-       || (datatype_is_complex(B_type) != datatype_is_complex(X_type))
-       || (datatype_is_complex(X_type) != datatype_is_complex(compute_type)))
-    {
-        return false;
-    }
-
-    return true;
+    // MXP LU implementation goes here
+    return rocblas_status_not_implemented;
 }
 
 template <typename T, typename...>
@@ -229,20 +255,21 @@ rocblas_status rocsolver_gesv_ex_impl(rocblas_handle handle,
     using T = void*;
     ROCSOLVER_ENTER_TOP("gesv_ex", "-n", n, "--nrhs", nrhs, "--lda", lda, "--ldb", ldb);
 
-    if((A_type == B_type) && (B_type == X_type) && (X_type == compute_type))
+    rocblas_status ret;
+
+    ret = rocsolver_ex_datatype_dispatch<gesv_call>(A_type, handle, n, nrhs, A, lda, ipiv, B, ldb,
+                                                    X, ldx, max_iter, tol, niter, info);
+
+    if(ret != rocblas_status_not_implemented)
     {
-        rocsolver_ex_datatype_dispatch<gesv_call>(A_type, handle, n, nrhs, A, lda, ipiv, B, ldb, X,
-                                                  ldx, max_iter, tol, niter, info);
+        return ret;
     }
 
-    if(gesv_ex_mxp_lu_accepts(A_type, B_type, X_type, compute_type))
-    {
-        rocsolver_ex_datatype_dispatch<gesv_mxp_lu_call>(A_type, compute_type, handle, n, nrhs, A,
-                                                         lda, ipiv, B, ldb, X, ldx, max_iter, tol,
-                                                         niter, info);
-    }
+    ret = rocsolver_ex_datatype_dispatch<gesv_mxp_lu_call>(A_type, compute_type, handle, n, nrhs, A,
+                                                           lda, ipiv, B, ldb, X, ldx, max_iter, tol,
+                                                           niter, info);
 
-    return rocblas_status_not_implemented;
+    return ret;
 }
 
 ROCSOLVER_END_NAMESPACE
